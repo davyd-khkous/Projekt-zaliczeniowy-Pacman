@@ -1,15 +1,15 @@
 ### Projekt zaliczeniowy - Pacman ###
 
-*Project wykonanych prac: 0%
+*Project wykonanych prac: 0%*
 
-Nad projektem pracują:
-Davyd Khomenko
-Veronika Tykhonova
-Andriana Beichak
-Nazar Yatskiv
-Bogdan Mikhnieiev
-*
-Pac-Man
+*Nad projektem pracują:*
+*Davyd Khomenko*
+*Veronika Tykhonova*
+*Andriana Beichak*
+*Nazar Yatskiv*
+*Bogdan Mikhnieiev*
+
+##Pac-Man##
 
 Projekt został wykonany przez 5-osobowy zespół. Jest to własna wersja klasycznej gry Pac-Man, w której gracz porusza się po labiryncie, zbiera monety i unika przeciwników.
 
