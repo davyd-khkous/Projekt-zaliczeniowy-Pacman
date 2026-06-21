@@ -116,7 +116,7 @@ fill(255, 255, 0)
     textSize(20)
     text("Wynik: " + str(score), 10, 25)
 
-    # Komunikat po zebraniu wszystkich monet
+    
     if len(coins) == 0:
         textSize(32)
         text("Poziom ukończony!", 120, 200)
