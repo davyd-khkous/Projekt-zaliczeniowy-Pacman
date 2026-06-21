@@ -1,11 +1,11 @@
 class Player:
-    def __init__(self, image_path, x, y):
+    def __init__(self, image_path, x, y, w, h):
         self.img = loadImage(image_path)
         self.x = x
         self.y = y
-        self.speed = 5
-        self.w = 64
-        self.h = 64
+        self.speed = 8
+        self.w = w
+        self.h = h
 
     def update(self):
         if keyPressed:
