@@ -77,3 +77,49 @@ class HunterGhost(Ghost):
 
         self.x = constrain(self.x, self.w / 2, width - self.w / 2)
         self.y = constrain(self.y, self.h / 2, height - self.h / 2)
+
+coins = [
+    [100, 100],
+    [200, 150],
+    [300, 250],
+    [150, 300]
+]
+
+score = 0
+
+def setup():
+    size(500, 400)
+
+def draw():
+    global score
+
+    background(0)
+
+fill(255, 255, 0)
+    noStroke()
+    for coin in coins:
+        ellipse(coin[0], coin[1], 10, 10)
+
+   
+    collected = []
+    for coin in coins:
+        distance = dist(pacman_x, pacman_y, coin[0], coin[1])
+
+        if distance < (pacman_size / 2):
+            collected.append(coin)
+            score += 1
+
+    
+    for coin in collected:
+        coins.remove(coin)
+            fill(255)
+    textSize(20)
+    text("Wynik: " + str(score), 10, 25)
+
+    
+    if len(coins) == 0:
+        textSize(32)
+        text("Poziom ukończony!", 120, 200)
+
+def movePacman(dx, dy):
+    global pacman_x, pacman_y
