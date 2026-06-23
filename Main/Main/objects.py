@@ -1,5 +1,5 @@
 class Player:
-    def init(self, image_path, x, y, w, h):
+    def __init__(self, image_path, x, y, w, h):
         self.img = loadImage(image_path)
         self.x = x
         self.y = y
