@@ -101,6 +101,51 @@ def drawGame():
         textAlign(CENTER)
         textSize(60)
         text("Poziom ukonczony!", width / 2, height / 2)
+        textSize(30)
+        text("Nacisnij M, aby przejsc do menu", width / 2, height / 2 + 60)
+
+def resetGame():
+    global level, player, pinky, blinky
+    global score
+
+    level = Level()
+
+    player = Player(
+        "Pacman.png",
+        cell_w * 1.5,
+        cell_h * 1.5,
+        cell_w,
+        cell_h
+    )
+
+    pinky = RandomGhost(
+        cell_w * 3.5,
+        cell_h * 3.5,
+        cell_w,
+        cell_h
+    )
+
+    blinky = HunterGhost(
+        cell_w * 13.5,
+        cell_h * 6.5,
+        cell_w,
+        cell_h
+    )
+
+    score = 0
+
+def keyPressed():
+    global game_state
+
+    if game_state == GAME and level.coins_left() == 0:
+
+        if key == 'm' or key == 'M':
+
+            resetGame()
+
+            menu.start_game = False
+
+            game_state = MENU
 
 def check_collision(ghost):
     distance = dist(player.x, player.y, ghost.x, ghost.y)
