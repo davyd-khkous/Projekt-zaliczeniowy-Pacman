@@ -1,11 +1,12 @@
 class Player:
-    def __init__(self, image_path, x, y, w, h):
+    def init(self, image_path, x, y, w, h):
         self.img = loadImage(image_path)
         self.x = x
         self.y = y
         self.speed = 8
         self.w = w
         self.h = h
+        self.flip_x = False
 
     def update(self, level, cell_w, cell_h):
         dx = 0
@@ -14,8 +15,10 @@ class Player:
         if keyPressed:
             if key == 'a' or key == 'A':
                 dx = -self.speed
+                self.flip_x = True
             elif key == 'd' or key == 'D':
                 dx = self.speed
+                self.flip_x = False
             elif key == 'w' or key == 'W':
                 dy = -self.speed
             elif key == 's' or key == 'S':
@@ -31,7 +34,15 @@ class Player:
             self.y = new_y
 
     def display(self):
-        image(self.img, self.x, self.y, self.w, self.h)
+        pushMatrix()
+        translate(self.x, self.y)
+
+        if self.flip_x:
+            scale(-1, 1)
+
+        image(self.img, 0, 0, self.w, self.h)
+
+        popMatrix()
 
 
 class Ghost(object):
