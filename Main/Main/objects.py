@@ -7,8 +7,14 @@ class Player:
         self.w = w
         self.h = h
         self.flip_x = False
+        
+        self.hp = 3
+        self.invulnerable_timer = 0
 
     def update(self, level, cell_w, cell_h):
+        if self.invulnerable_timer > 0:
+            self.invulnerable_timer -= 1
+
         dx = 0
         dy = 0
 
@@ -34,6 +40,9 @@ class Player:
             self.y = new_y
 
     def display(self):
+        if self.invulnerable_timer > 0 and (self.invulnerable_timer / 10) % 2 == 0:
+            return
+
         pushMatrix()
         translate(self.x, self.y)
 

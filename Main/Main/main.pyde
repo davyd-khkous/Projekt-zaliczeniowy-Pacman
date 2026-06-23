@@ -4,6 +4,7 @@ from menu import Menu
 
 MENU = 0
 GAME = 1
+GAME_OVER = 2
 
 gameState = MENU
 
@@ -48,10 +49,13 @@ def draw():
 
     elif gameState == GAME:
         drawGame()
+        
+    elif gameState == GAME_OVER:
+        drawGameOver()
 
 
 def drawGame():
-    global score
+    global score, gameState
 
     background(30)
 
@@ -60,6 +64,12 @@ def drawGame():
     blinky.move(player.x, player.y, level, cell_w, cell_h)
 
     score += level.collect_coins(player.x, player.y, player.w / 2, cell_w, cell_h)
+    
+    check_collision(pinky)
+    check_collision(blinky)
+    
+    if player.hp <= 0:
+        gameState = GAME_OVER
 
     level.display(cell_w, cell_h)
 
@@ -71,12 +81,25 @@ def drawGame():
     textAlign(LEFT)
     textSize(32)
     text("Wynik: " + str(score), 20, 40)
+    text("Zycia: " + str(player.hp), width - 150, 40)
 
     if level.coins_left() == 0:
         textAlign(CENTER)
         textSize(60)
         text("Poziom ukonczony!", width / 2, height / 2)
 
+def check_collision(ghost):
+    distance = dist(player.x, player.y, ghost.x, ghost.y)
+    if distance < (player.w * 0.4 + ghost.w * 0.4) and player.invulnerable_timer <= 0:
+        player.hp -= 1
+        player.invulnerable_timer = 90
+        
+def drawGameOver():
+    background(20, 0, 0)
+    fill(255, 0, 0)
+    textAlign(CENTER)
+    textSize(100)
+    text("PRZEGRANA", width / 2, height / 2 - 50)
 
 def mousePressed():
     global gameState
