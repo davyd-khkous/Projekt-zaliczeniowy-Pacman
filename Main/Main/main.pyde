@@ -5,6 +5,7 @@ from menu import Menu
 MENU = 0
 GAME = 1
 GAME_OVER = 2
+LEVEL_COMPLETE = 3
 
 gameState = MENU
 
@@ -49,12 +50,12 @@ def draw():
 
     elif gameState == GAME:
         drawGame()
-        
-    elif gameState == GAME_OVER:
-        drawGameOver()
 
     elif gameState == GAME_OVER:
         drawGameOver()
+
+    elif gameState == LEVEL_COMPLETE:
+        drawLevelComplete()
 
 
 def drawGame():
@@ -76,13 +77,11 @@ def drawGame():
     check_collision(pinky)
     check_collision(blinky)
 
-    score += level.collect_coins(player.x, player.y, player.w / 2, cell_w, cell_h)
-    
-    check_collision(pinky)
-    check_collision(blinky)
-
     if player.hp <= 0:
         gameState = GAME_OVER
+
+    elif level.coins_left() == 0:
+        gameState = LEVEL_COMPLETE
 
     level.display(cell_w, cell_h)
 
@@ -90,95 +89,67 @@ def drawGame():
     pinky.display()
     blinky.display()
 
+    drawInterface()
+
+
+def drawInterface():
+    fill(80)
+    stroke(255)
+    strokeWeight(3)
+    rect(15, 15, 180, 45)
+    rect(width - 195, 15, 180, 45)
+ 
     fill(255)
+    textSize(24)
     textAlign(LEFT)
-    textSize(32)
-    text("Wynik: " + str(score), 20, 40)
-    text("Zycia: " + str(player.hp), width - 180, 40)
-    text("Zycia: " + str(player.hp), width - 150, 40)
+    text("Wynik: " + str(score), 30, 45)
 
-    if level.coins_left() == 0:
-        textAlign(CENTER)
-        textSize(60)
-        text("Poziom ukonczony!", width / 2, height / 2)
-        textSize(30)
-        text("Nacisnij M, aby przejsc do menu", width / 2, height / 2 + 60)
+    textAlign(LEFT)
+    text("Zycia: " + str(player.hp), width - 175, 45)
 
-def resetGame():
-    global level, player, pinky, blinky
-    global score
-
-    level = Level()
-
-    player = Player(
-        "Pacman.png",
-        cell_w * 1.5,
-        cell_h * 1.5,
-        cell_w,
-        cell_h
-    )
-
-    pinky = RandomGhost(
-        cell_w * 3.5,
-        cell_h * 3.5,
-        cell_w,
-        cell_h
-    )
-
-    blinky = HunterGhost(
-        cell_w * 13.5,
-        cell_h * 6.5,
-        cell_w,
-        cell_h
-    )
-
-    score = 0
-
-def keyPressed():
-    global game_state
-
-    if game_state == GAME and level.coins_left() == 0:
-
-        if key == 'm' or key == 'M':
-
-            resetGame()
-
-            menu.start_game = False
-
-            game_state = MENU
 
 def check_collision(ghost):
-    distance = dist(player.x, player.y, ghost.x, ghost.y)
-    if distance < (player.w * 0.4 + ghost.w * 0.4) and player.invulnerable_timer <= 0:
-        player.hp -= 1
-        player.invulnerable_timer = 90
-        
-def drawGameOver():
-    background(20, 0, 0)
-    fill(255, 0, 0)
-    textAlign(CENTER)
-    textSize(100)
-    text("PRZEGRANA", width / 2, height / 2 - 50)
+    distance_to_ghost = dist(player.x, player.y, ghost.x, ghost.y)
+    collision_distance = player.w * 0.4 + ghost.w * 0.4
 
-def check_collision(ghost):
-    distance = dist(player.x, player.y, ghost.x, ghost.y)
-
-    if distance < (player.w * 0.4 + ghost.w * 0.4) and player.invulnerable_timer <= 0:
+    if distance_to_ghost < collision_distance and player.invulnerable_timer <= 0:
         player.hp -= 1
-        player.invulnerable_timer = 90
+        player.invulnerable_timer = 120
+        player.reset_position()
 
 
 def drawGameOver():
-    background(20, 0, 0)
 
-    fill(255, 0, 0)
-    textAlign(CENTER)
-    textSize(100)
-    text("PRZEGRANA", width / 2, height / 2 - 50)
+    background(0)
+
+    fill(150, 0, 0)
+    stroke(255, 0, 0)
+    strokeWeight(5)
+    rect(width / 2 - 250, height / 2 - 150, 500, 300)
 
     fill(255)
-    textSize(36)
-    text("Kliknij, zeby wrocic do menu", width / 2, height / 2 + 40)
+    textAlign(CENTER)
+    textSize(60)
+    text("PRZEGRANA :(", width / 2, height / 2 - 20)
+
+    textSize(24)
+    text("Kliknij zeby wrocic", width / 2, height / 2 + 60)
+
+def drawLevelComplete():
+    background(0)
+
+    fill(0, 120, 0)
+    stroke(0, 255, 0)
+    strokeWeight(5)
+    rect(width / 2 - 250, height / 2 - 150, 500, 300)
+
+    fill(255)
+    textAlign(CENTER)
+    textSize(60)
+    text("WYGRANA!!!", width / 2, height / 2 - 20)
+
+    textSize(24)
+    text("Kliknij zeby wrocic", width / 2, height / 2 + 60)
 
 
 def mousePressed():
@@ -197,7 +168,7 @@ def mousePressed():
         elif action == "exit":
             exit()
 
-    elif gameState == GAME_OVER:
+    elif gameState == GAME_OVER or gameState == LEVEL_COMPLETE:
         gameState = MENU
 
 

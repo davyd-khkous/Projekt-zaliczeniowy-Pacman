@@ -6,7 +6,7 @@ class Menu:
         self.button_h = 90
 
     def display(self):
-        background(10, 20, 80)
+        background(0)
 
         textAlign(CENTER)
 
@@ -18,13 +18,17 @@ class Menu:
         textSize(32)
         text("Dostepna mapa: " + self.selectedMap, width / 2, 310)
 
-        self.draw_button(width / 2 - 200, 380, "WYBIERZ MAPE", 70, 120, 255)
-        self.draw_button(width / 2 - 200, 510, "GRAJ", 0, 180, 0)
-        self.draw_button(width / 2 - 200, 640, "WYJDZ Z GRY", 180, 0, 0)
+        self.draw_button(width / 2 - 200, 380, "WYBIERZ MAPE", 50, 80, 180) 
+        self.draw_button(width / 2 - 200, 510, "GRAJ", 0, 120, 0)           
+        self.draw_button(width / 2 - 200, 640, "WYJDZ Z GRY", 150, 0, 0)    
 
     def draw_button(self, x, y, label, r, g, b):
+
         fill(r, g, b)
-        rect(x, y, self.button_w, self.button_h, 10)
+        stroke(255)       
+        strokeWeight(5)    
+
+        rect(x, y, self.button_w, self.button_h)
 
         fill(255)
         textSize(32)

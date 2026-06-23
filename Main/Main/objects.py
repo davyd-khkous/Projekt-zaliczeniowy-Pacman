@@ -8,6 +8,9 @@ class Player:
         self.speed = 8
         self.w = w
         self.h = h
+        self.start_x = x
+        self.start_y = y
+
 
         self.flip_x = False
         self.eating_timer = 0
@@ -33,18 +36,15 @@ class Player:
             self.down = True
 
     def release_key(self, k):
-        if k == 'a' or k == 'A':
-            self.left = False
-        elif k == 'd' or k == 'D':
-            self.right = False
-        elif k == 'w' or k == 'W':
-            self.up = False
-        elif k == 's' or k == 'S':
-            self.down = False
-        
-        self.hp = 3
-        self.invulnerable_timer = 0
-
+            if k == 'a' or k == 'A':
+                self.left = False
+            elif k == 'd' or k == 'D':
+                self.right = False
+            elif k == 'w' or k == 'W':
+                self.up = False
+            elif k == 's' or k == 'S':
+                self.down = False
+    
     def update(self, level, cell_w, cell_h):
         if self.invulnerable_timer > 0:
             self.invulnerable_timer -= 1
@@ -95,7 +95,16 @@ class Player:
         image(current_img, 0, 0, self.w, self.h)
 
         popMatrix()
-
+        
+    def reset_position(self):
+        self.x = self.start_x
+        self.y = self.start_y
+    
+        self.left = False
+        self.right = False
+        self.up = False
+        self.down = False
+    
 
 class Ghost(object):
     def __init__(self, x, y, w, h, image_path):
