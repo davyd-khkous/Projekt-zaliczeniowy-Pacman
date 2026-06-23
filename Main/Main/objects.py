@@ -46,7 +46,7 @@ class Player:
 
 
 class Ghost(object):
-    def init(self, x, y, w, h, image_path):
+    def __init__(self, x, y, w, h, image_path):
         self.x = x
         self.y = y
         self.speed = 2
