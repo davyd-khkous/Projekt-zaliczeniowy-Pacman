@@ -41,6 +41,9 @@ class Player:
             self.up = False
         elif k == 's' or k == 'S':
             self.down = False
+        
+        self.hp = 3
+        self.invulnerable_timer = 0
 
     def update(self, level, cell_w, cell_h):
         if self.invulnerable_timer > 0:
