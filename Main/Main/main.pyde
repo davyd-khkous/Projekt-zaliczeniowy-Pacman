@@ -1,25 +1,34 @@
 from level import Level
 from objects import Player, RandomGhost, HunterGhost
 from menu import Menu
+
 MENU = 0
 GAME = 1
 
-game_state = MENU
-menu = None
+gameState = MENU
+
 level = None
 player = None
 pinky = None
 blinky = None
+menu = None
+
 cell_w = 0
 cell_h = 0
 score = 0
 
+
 def setup():
-    global level, player, pinky, blinky, cell_w, cell_h, menu
+    global menu
 
     size(1920, 1080)
     imageMode(CENTER)
+
     menu = Menu()
+
+
+def startGame():
+    global level, player, pinky, blinky, cell_w, cell_h, score
 
     level = Level()
 
@@ -30,16 +39,20 @@ def setup():
     pinky = RandomGhost(cell_w * 3.5, cell_h * 3.5, cell_w, cell_h)
     blinky = HunterGhost(cell_w * 13.5, cell_h * 6.5, cell_w, cell_h)
 
-def draw():
-    global score, game_state
-    if game_state == MENU:
+    score = 0
 
+
+def draw():
+    if gameState == MENU:
         menu.display()
 
-        if menu.start_game:
-            game_state = GAME
+    elif gameState == GAME:
+        drawGame()
 
-    elif game_state == GAME:
+
+def drawGame():
+    global score
+
     background(30)
 
     player.update(level, cell_w, cell_h)
@@ -55,14 +68,28 @@ def draw():
     blinky.display()
 
     fill(255)
+    textAlign(LEFT)
     textSize(32)
     text("Wynik: " + str(score), 20, 40)
 
     if level.coins_left() == 0:
+        textAlign(CENTER)
         textSize(60)
-        text("Poziom ukonczony!", width / 2 - 250, height / 2)
+        text("Poziom ukonczony!", width / 2, height / 2)
+
 
 def mousePressed():
+    global gameState
 
-    if game_state == MENU:
-        menu.mousePressed()
+    if gameState == MENU:
+        action = menu.click(mouseX, mouseY)
+
+        if action == "map":
+            print("Wybrana mapa:", menu.selectedMap)
+
+        elif action == "play":
+            startGame()
+            gameState = GAME
+
+        elif action == "exit":
+            exit()

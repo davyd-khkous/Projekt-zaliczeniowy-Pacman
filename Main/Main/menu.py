@@ -1,94 +1,48 @@
+class Menu:
+    def __init__(self):
+        self.selectedMap = "Mapa"
 
-MENU = 0
-GAME = 1
+        self.button_w = 400
+        self.button_h = 90
 
-gameState = MENU
+    def display(self):
+        background(10, 20, 80)
 
-selectedMap = "Mapa"
+        textAlign(CENTER)
 
+        fill(255, 255, 0)
+        textSize(80)
+        text("PAC-MAN", width / 2, 220)
 
-def setup():
-    size(800, 600)
+        fill(255)
+        textSize(32)
+        text("Dostepna mapa: " + self.selectedMap, width / 2, 310)
 
+        self.draw_button(width / 2 - 200, 380, "WYBIERZ MAPE", 70, 120, 255)
+        self.draw_button(width / 2 - 200, 510, "GRAJ", 0, 180, 0)
+        self.draw_button(width / 2 - 200, 640, "WYJDZ Z GRY", 180, 0, 0)
 
-def draw():
+    def draw_button(self, x, y, label, r, g, b):
+        fill(r, g, b)
+        rect(x, y, self.button_w, self.button_h, 10)
 
-    if gameState == MENU:
-        drawMenu()
+        fill(255)
+        textSize(32)
+        text(label, x + self.button_w / 2, y + 55)
 
-    elif gameState == GAME:
-        drawGame()
+    def click(self, mx, my):
+        x = width / 2 - 200
 
+        if self.is_inside(mx, my, x, 380):
+            return "map"
 
-def drawMenu():
+        if self.is_inside(mx, my, x, 510):
+            return "play"
 
-    background(10, 20, 80)
+        if self.is_inside(mx, my, x, 640):
+            return "exit"
 
-    textAlign(CENTER)
+        return None
 
-
-    fill(255, 255, 0)
-    textSize(40)
-    text("PAC-MAN", width/2, 120)
-
-
-    fill(255)
-    textSize(20)
-    text("Dostępna mapa: " + selectedMap, width/2, 180)
-
-
-    fill(70, 120, 255)
-    rect(250, 230, 300, 70, 10)
-
-    fill(255)
-    textSize(24)
-    text("WYBIERZ MAPĘ", width/2, 275)
-
-
-    fill(0, 180, 0)
-    rect(250, 330, 300, 70, 10)
-
-    fill(255)
-    text("GRAJ", width/2, 375)
-
-
-    fill(180, 0, 0)
-    rect(250, 430, 300, 70, 10)
-
-    fill(255)
-    text("WYJDŹ Z GRY", width/2, 475)
-
-
-def drawGame():
-
-    background(0)
-
-    fill(255)
-    textSize(24)
-    textAlign(LEFT)
-
-    text("Mapa: " + selectedMap, 20, 40)
-
-
-
-
-def mousePressed():
-
-    global gameState
-
-    if gameState == MENU:
-
-    
-        if (250 <= mouseX <= 550 and
-            230 <= mouseY <= 300):
-            print("Wybrana mapa:", selectedMap)
-
-    
-        elif (250 <= mouseX <= 550 and
-              330 <= mouseY <= 400):
-            gameState = GAME
-
-    
-        elif (250 <= mouseX <= 550 and
-              430 <= mouseY <= 500):
-            exit()
+    def is_inside(self, mx, my, x, y):
+        return x <= mx <= x + self.button_w and y <= my <= y + self.button_h
