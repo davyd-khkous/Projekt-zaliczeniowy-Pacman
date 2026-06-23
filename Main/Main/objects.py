@@ -60,7 +60,7 @@ class Ghost(object):
 
 class RandomGhost(Ghost):
     def __init__(self, x, y, w, h):
-        Ghost.init(self, x, y, w, h, "RandomGhost.png")
+        Ghost.__init__(self, x, y, w, h, "RandomGhost.png")
         self.direction = int(random(4))
 
     def move(self, level, cell_w, cell_h):
@@ -88,24 +88,48 @@ class RandomGhost(Ghost):
 
 class HunterGhost(Ghost):
     def __init__(self, x, y, w, h):
-        Ghost.init(self, x, y, w, h, "HunterGhost.png")
+        Ghost.__init__(self, x, y, w, h, "HunterGhost.png")
 
     def move(self, pacman_x, pacman_y, level, cell_w, cell_h):
-        dx = 0
-        dy = 0
+        diff_x = pacman_x - self.x
+        diff_y = pacman_y - self.y
 
-        if self.x < pacman_x:
-            dx = self.speed
-        elif self.x > pacman_x:
-            dx = -self.speed
+        move_x = self.speed if diff_x > 0 else -self.speed if diff_x < 0 else 0
+        move_y = self.speed if diff_y > 0 else -self.speed if diff_y < 0 else 0
 
-        if self.y < pacman_y:
-            dy = self.speed
-        elif self.y > pacman_y:
-            dy = -self.speed
+        if abs(diff_x) > abs(diff_y):
+            primary_axis = 'x'; primary_move = move_x
+            secondary_axis = 'y'; secondary_move = move_y
+        else:
+            primary_axis = 'y'; primary_move = move_y
+            secondary_axis = 'x'; secondary_move = move_x
 
-        if level.can_move_to(self.x + dx, self.y, self.w, self.h, cell_w, cell_h):
-            self.x += dx
+        moved = False
 
-        if level.can_move_to(self.x, self.y + dy, self.w, self.h, cell_w, cell_h):
-            self.y += dy
+        if primary_axis == 'x' and primary_move != 0:
+            if level.can_move_to(self.x + primary_move, self.y, self.w, self.h, cell_w, cell_h):
+                self.x += primary_move
+                moved = True
+        elif primary_axis == 'y' and primary_move != 0:
+            if level.can_move_to(self.x, self.y + primary_move, self.w, self.h, cell_w, cell_h):
+                self.y += primary_move
+                moved = True
+
+        if not moved:
+            if primary_axis == 'x':
+                if secondary_move == 0:
+                    if level.can_move_to(self.x, self.y + self.speed, self.w, self.h, cell_w, cell_h):
+                        self.y += self.speed
+                    elif level.can_move_to(self.x, self.y - self.speed, self.w, self.h, cell_w, cell_h):
+                        self.y -= self.speed
+                elif level.can_move_to(self.x, self.y + secondary_move, self.w, self.h, cell_w, cell_h):
+                    self.y += secondary_move
+                    
+            elif primary_axis == 'y':
+                if secondary_move == 0:
+                    if level.can_move_to(self.x + self.speed, self.y, self.w, self.h, cell_w, cell_h):
+                        self.x += self.speed
+                    elif level.can_move_to(self.x - self.speed, self.y, self.w, self.h, cell_w, cell_h):
+                        self.x -= self.speed
+                elif level.can_move_to(self.x + secondary_move, self.y, self.w, self.h, cell_w, cell_h):
+                    self.x += secondary_move
