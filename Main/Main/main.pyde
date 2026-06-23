@@ -22,20 +22,20 @@ def setup():
 
     player = Player("Pacman.png", cell_w * 1.5, cell_h * 1.5, cell_w, cell_h)
     pinky = RandomGhost(cell_w * 3.5, cell_h * 3.5, cell_w, cell_h)
-    blinky = HunterGhost(cell_w * 12.5, cell_h * 6.5, cell_w, cell_h)
+    blinky = HunterGhost(cell_w * 13.5, cell_h * 6.5, cell_w, cell_h)
 
 def draw():
     global score
 
     background(30)
 
-    level.display(cell_w, cell_h)
-
-    player.update()
-    pinky.move()
-    blinky.move(player.x, player.y)
+    player.update(level, cell_w, cell_h)
+    pinky.move(level, cell_w, cell_h)
+    blinky.move(player.x, player.y, level, cell_w, cell_h)
 
     score += level.collect_coins(player.x, player.y, player.w / 2, cell_w, cell_h)
+
+    level.display(cell_w, cell_h)
 
     player.display()
     pinky.display()

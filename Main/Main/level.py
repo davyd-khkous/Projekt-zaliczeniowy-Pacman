@@ -11,7 +11,7 @@ class Level:
             "#..............#",
             "################"
         ]
-        
+
     def display(self, cell_w, cell_h):
         for row in range(len(self.map)):
             for col in range(len(self.map[row])):
@@ -67,11 +67,33 @@ class Level:
 
         return total
 
+    def get_tile_at_pixel(self, x, y, cell_w, cell_h):
+        col = int(x / cell_w)
+        row = int(y / cell_h)
 
-    def coins_left(self):
-        total = 0
+        if row < 0 or row >= len(self.map):
+            return "#"
 
-        for row in self.map:
-            total += row.count(".")
+        if col < 0 or col >= len(self.map[row]):
+            return "#"
 
-        return total
+        return self.map[row][col]
+
+    def can_move_to(self, x, y, obj_w, obj_h, cell_w, cell_h):
+        hitbox_w = obj_w * 0.35
+        hitbox_h = obj_h * 0.35
+
+        points = [
+            [x - hitbox_w, y - hitbox_h],
+            [x + hitbox_w, y - hitbox_h],
+            [x - hitbox_w, y + hitbox_h],
+            [x + hitbox_w, y + hitbox_h]
+        ]
+
+        for point in points:
+            tile = self.get_tile_at_pixel(point[0], point[1], cell_w, cell_h)
+
+            if tile == "#":
+                return False
+
+        return True
