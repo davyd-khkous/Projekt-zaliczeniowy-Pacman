@@ -1,6 +1,6 @@
 ### Projekt zaliczeniowy - Pacman ###
 
-*Project wykonanych prac: 0%*
+*Project wykonanych prac: 65%*
 
 *Nad projektem pracują:*
 *Davyd Khomenko*
