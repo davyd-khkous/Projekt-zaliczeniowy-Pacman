@@ -1,28 +1,63 @@
 class Player:
-    def __init__(self, image_path, x, y, w, h):
-        self.img = loadImage(image_path)
+    def __init__(self, image_path, open_image_path, x, y, w, h):
+        self.img_closed = loadImage(image_path)
+        self.img_open = loadImage(open_image_path)
+
         self.x = x
         self.y = y
         self.speed = 8
         self.w = w
         self.h = h
+
         self.flip_x = False
+        self.eating_timer = 0
+
+        self.hp = 3
+        self.invulnerable_timer = 0
+
+        self.left = False
+        self.right = False
+        self.up = False
+        self.down = False
+
+    def press_key(self, k):
+        if k == 'a' or k == 'A':
+            self.left = True
+            self.flip_x = True
+        elif k == 'd' or k == 'D':
+            self.right = True
+            self.flip_x = False
+        elif k == 'w' or k == 'W':
+            self.up = True
+        elif k == 's' or k == 'S':
+            self.down = True
+
+    def release_key(self, k):
+        if k == 'a' or k == 'A':
+            self.left = False
+        elif k == 'd' or k == 'D':
+            self.right = False
+        elif k == 'w' or k == 'W':
+            self.up = False
+        elif k == 's' or k == 'S':
+            self.down = False
 
     def update(self, level, cell_w, cell_h):
+        if self.invulnerable_timer > 0:
+            self.invulnerable_timer -= 1
+
         dx = 0
         dy = 0
 
-        if keyPressed:
-            if key == 'a' or key == 'A':
-                dx = -self.speed
-                self.flip_x = True
-            elif key == 'd' or key == 'D':
-                dx = self.speed
-                self.flip_x = False
-            elif key == 'w' or key == 'W':
-                dy = -self.speed
-            elif key == 's' or key == 'S':
-                dy = self.speed
+        if self.left:
+            dx = -self.speed
+        elif self.right:
+            dx = self.speed
+
+        if self.up:
+            dy = -self.speed
+        elif self.down:
+            dy = self.speed
 
         new_x = self.x + dx
         new_y = self.y + dy
@@ -33,14 +68,28 @@ class Player:
         if level.can_move_to(self.x, new_y, self.w, self.h, cell_w, cell_h):
             self.y = new_y
 
+        if self.eating_timer > 0:
+            self.eating_timer -= 1
+
+    def eat(self):
+        self.eating_timer = 20
+
     def display(self):
+        if self.invulnerable_timer > 0 and (self.invulnerable_timer / 10) % 2 == 0:
+            return
+
+        if self.eating_timer > 0:
+            current_img = self.img_open
+        else:
+            current_img = self.img_closed
+
         pushMatrix()
         translate(self.x, self.y)
 
         if self.flip_x:
             scale(-1, 1)
 
-        image(self.img, 0, 0, self.w, self.h)
+        image(current_img, 0, 0, self.w, self.h)
 
         popMatrix()
 
@@ -98,11 +147,15 @@ class HunterGhost(Ghost):
         move_y = self.speed if diff_y > 0 else -self.speed if diff_y < 0 else 0
 
         if abs(diff_x) > abs(diff_y):
-            primary_axis = 'x'; primary_move = move_x
-            secondary_axis = 'y'; secondary_move = move_y
+            primary_axis = 'x'
+            primary_move = move_x
+            secondary_axis = 'y'
+            secondary_move = move_y
         else:
-            primary_axis = 'y'; primary_move = move_y
-            secondary_axis = 'x'; secondary_move = move_x
+            primary_axis = 'y'
+            primary_move = move_y
+            secondary_axis = 'x'
+            secondary_move = move_x
 
         moved = False
 
@@ -110,6 +163,7 @@ class HunterGhost(Ghost):
             if level.can_move_to(self.x + primary_move, self.y, self.w, self.h, cell_w, cell_h):
                 self.x += primary_move
                 moved = True
+
         elif primary_axis == 'y' and primary_move != 0:
             if level.can_move_to(self.x, self.y + primary_move, self.w, self.h, cell_w, cell_h):
                 self.y += primary_move
@@ -124,7 +178,7 @@ class HunterGhost(Ghost):
                         self.y -= self.speed
                 elif level.can_move_to(self.x, self.y + secondary_move, self.w, self.h, cell_w, cell_h):
                     self.y += secondary_move
-                    
+
             elif primary_axis == 'y':
                 if secondary_move == 0:
                     if level.can_move_to(self.x + self.speed, self.y, self.w, self.h, cell_w, cell_h):

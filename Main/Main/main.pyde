@@ -4,6 +4,7 @@ from menu import Menu
 
 MENU = 0
 GAME = 1
+GAME_OVER = 2
 
 gameState = MENU
 
@@ -35,7 +36,7 @@ def startGame():
     cell_w = width / 16.0
     cell_h = height / 9.0
 
-    player = Player("Pacman.png", cell_w * 1.5, cell_h * 1.5, cell_w, cell_h)
+    player = Player("Pacman.png", "Pacman2.png", cell_w * 1.5, cell_h * 1.5, cell_w, cell_h)
     pinky = RandomGhost(cell_w * 3.5, cell_h * 3.5, cell_w, cell_h)
     blinky = HunterGhost(cell_w * 13.5, cell_h * 6.5, cell_w, cell_h)
 
@@ -49,9 +50,12 @@ def draw():
     elif gameState == GAME:
         drawGame()
 
+    elif gameState == GAME_OVER:
+        drawGameOver()
+
 
 def drawGame():
-    global score
+    global score, gameState
 
     background(30)
 
@@ -59,7 +63,18 @@ def drawGame():
     pinky.move(level, cell_w, cell_h)
     blinky.move(player.x, player.y, level, cell_w, cell_h)
 
-    score += level.collect_coins(player.x, player.y, player.w / 2, cell_w, cell_h)
+    collected = level.collect_coins(player.x, player.y, player.w / 2, cell_w, cell_h)
+
+    if collected > 0:
+        player.eat()
+
+    score += collected
+
+    check_collision(pinky)
+    check_collision(blinky)
+
+    if player.hp <= 0:
+        gameState = GAME_OVER
 
     level.display(cell_w, cell_h)
 
@@ -71,11 +86,33 @@ def drawGame():
     textAlign(LEFT)
     textSize(32)
     text("Wynik: " + str(score), 20, 40)
+    text("Zycia: " + str(player.hp), width - 180, 40)
 
     if level.coins_left() == 0:
         textAlign(CENTER)
         textSize(60)
         text("Poziom ukonczony!", width / 2, height / 2)
+
+
+def check_collision(ghost):
+    distance = dist(player.x, player.y, ghost.x, ghost.y)
+
+    if distance < (player.w * 0.4 + ghost.w * 0.4) and player.invulnerable_timer <= 0:
+        player.hp -= 1
+        player.invulnerable_timer = 90
+
+
+def drawGameOver():
+    background(20, 0, 0)
+
+    fill(255, 0, 0)
+    textAlign(CENTER)
+    textSize(100)
+    text("PRZEGRANA", width / 2, height / 2 - 50)
+
+    fill(255)
+    textSize(36)
+    text("Kliknij, zeby wrocic do menu", width / 2, height / 2 + 40)
 
 
 def mousePressed():
@@ -93,3 +130,16 @@ def mousePressed():
 
         elif action == "exit":
             exit()
+
+    elif gameState == GAME_OVER:
+        gameState = MENU
+
+
+def keyPressed():
+    if gameState == GAME:
+        player.press_key(key)
+
+
+def keyReleased():
+    if gameState == GAME:
+        player.release_key(key)

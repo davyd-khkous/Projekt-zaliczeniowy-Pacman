@@ -80,8 +80,8 @@ class Level:
         return self.map[row][col]
 
     def can_move_to(self, x, y, obj_w, obj_h, cell_w, cell_h):
-        hitbox_w = obj_w * 0.47
-        hitbox_h = obj_h * 0.47
+        hitbox_w = obj_w * 0.45
+        hitbox_h = obj_h * 0.45
 
         points = [
             [x - hitbox_w, y - hitbox_h],
