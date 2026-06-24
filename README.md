@@ -13,6 +13,9 @@
 
 *Bogdan Mikhnieiev* - dodanie całego nowego poziomu/mapy, możliwość wybrania poziomu, trudniejszy poziomu, integracja kodu z nowym systemem, utrudnianie zachowanie wrogów, przedkości na nowym poziomie 
 
+Praca wszyskich: dodanie tzw "maszyny stanów" do początkowego i końcowego ekranu, testowanie kodu, commity, praca nad hitboxami
+
+**Proszę zwrócić uwagę na to że Davyd Khomenko mimo większej ilości commitów nie robił o wiele więcej pracy niż inni, starałem się zarządzać zespołem i podzielic pracę miedzy całym zespołem, według umiętności, preferencji i % zajętności( a duża liczba commitow powiązana z moim administrowaniem repozytorium)**
 # Pac-Man #
 
 Projekt został wykonany przez 5-osobowy zespół. Jest to własna wersja klasycznej gry Pac-Man, w której gracz porusza się po labiryncie, zbiera monety i unika przeciwników.
