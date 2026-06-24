@@ -32,14 +32,25 @@ def setup():
 def startGame():
     global level, player, pinky, blinky, cell_w, cell_h, score
 
-    level = Level()
+    level = Level(menu.selectedMap)
 
-    cell_w = width / 16.0
-    cell_h = height / 9.0
+    cols = len(level.map[0])
+    rows = len(level.map)
+    
+    cell_w = width / float(cols)
+    cell_h = height / float(rows)
 
     player = Player("Pacman.png", "Pacman2.png", cell_w * 1.5, cell_h * 1.5, cell_w, cell_h)
     pinky = RandomGhost(cell_w * 3.5, cell_h * 3.5, cell_w, cell_h)
-    blinky = HunterGhost(cell_w * 13.5, cell_h * 6.5, cell_w, cell_h)
+    
+    if menu.selectedMap == "Poziom 2":
+        blinky = HunterGhost(cell_w * 17.5, cell_h * 10.5, cell_w, cell_h)
+        pinky.speed = 4
+        blinky.speed = 4
+    else:
+        blinky = HunterGhost(cell_w * 13.5, cell_h * 6.5, cell_w, cell_h)
+        pinky.speed = 2
+        blinky.speed = 2
 
     score = 0
 
@@ -119,7 +130,6 @@ def check_collision(ghost):
 
 
 def drawGameOver():
-
     background(0)
 
     fill(150, 0, 0)
@@ -134,6 +144,7 @@ def drawGameOver():
 
     textSize(24)
     text("Kliknij zeby wrocic", width / 2, height / 2 + 60)
+
 
 def drawLevelComplete():
     background(0)
@@ -159,6 +170,7 @@ def mousePressed():
         action = menu.click(mouseX, mouseY)
 
         if action == "map":
+            menu.toggle_map() 
             print("Wybrana mapa:", menu.selectedMap)
 
         elif action == "play":
