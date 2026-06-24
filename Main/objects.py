@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Player:
     # Konstruktor gracza - ładowanie tekstur (sprajtów) i ustawienie statystyk
     def __init__(self, image_path, open_image_path, x, y, w, h):

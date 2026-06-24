@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Menu:
     # Stan początkowy menu
     def __init__(self):

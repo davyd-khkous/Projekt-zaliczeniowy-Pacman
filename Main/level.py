@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #Dynamicznie ładuje tablicę z układem poziomu
 class Level:
     def __init__(self, map_name):
