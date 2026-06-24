@@ -170,7 +170,7 @@ def mousePressed():
         action = menu.click(mouseX, mouseY)
 
         if action == "map":
-            menu.toggle_map() # Тепер кнопка викликає перемикання карти!
+            menu.toggle_map() 
             print("Wybrana mapa:", menu.selectedMap)
 
         elif action == "play":
