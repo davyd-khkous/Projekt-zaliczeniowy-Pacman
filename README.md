@@ -1,6 +1,6 @@
 ### Projekt zaliczeniowy - Pacman ###
 
-*Project wykonanych prac: 95%*
+*Project wykonanych prac: 100%*
 
 *Nad projektem pracują:*
 *Davyd Khomenko* - stworzenie repozytorium, poprawa błedów innych/integracja kodu, uzuwanie zbędnych rzeczy, stworzenie głównego bohatera jego sprajtów i systemu przemieszczeń, zrobienie struktury oraz wieloplikowości, zrobienie mapy( bez collision) i możliwości zbierania monet, dodanie animacji głównego bohatera, doprecyzowanie interfejsu, podliczanie monet
