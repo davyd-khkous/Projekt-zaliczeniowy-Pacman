@@ -192,3 +192,4 @@ def keyPressed():
 def keyReleased():
     if gameState == GAME:
         player.release_key(key)
+
